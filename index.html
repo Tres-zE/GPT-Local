@@ -4,26 +4,102 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ChatGPT Local 100% privado, gratis y maravilloso</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
+          sans-serif;
+        background: #f0f0f0;
+        display: grid;
+        place-content: center;
+        height: 100vh;
+        height: 100dvh;
+      }
+
+      main {
+        width: 400px;
+        max-width: 100%;
+        height: 70vh;
+
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 8px;
+        margin-bottom: 10px;
+
+        overflow-y: auto;
+      }
+
+      ul {
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        padding: 0;
+      }
+
+      .message {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin: 4px 0;
+        padding: 4px 8px;
+
+        > span:first-child {
+          width: 36px;
+          height: 36px;
+          background: #ddd3d3;
+          font-size: 12px;
+          font-weight: 500;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 99px;
+        }
+
+        p {
+          border-radius: 4px;
+          padding: 4px 8px;
+        }
+
+        &.user {
+          align-self: flex-end;
+          align-items: flex-end;
+          span,
+          p {
+            background: rgb(10, 114, 234);
+          }
+        }
+
+        &.bot {
+          align-self: flex-start;
+          span,
+          p {
+            background: rgb(242, 163, 5);
+          }
+        }
+      }
+    </style>
   </head>
   <body>
     <main>
       <ul>
         <li class="message bot">
           <span>GPT</span>
-          <span>Esta es la respuesta del bot</span>
+          <p>Esta es la respuesta del bot</p>
         </li>
 
         <li class="message user">
           <span>Tú</span>
-          <span>Esta es la preguta del usuario</span>
+          <p>Esta es la preguta del usuario</p>
         </li>
 
         <li class="message user">
           <span>GPT</span>
-          <span
-            >Esta es la respuesta del bot y es una respuesta muy larga para ver
-            que no se rompe nada</span
-          >
+          <p>
+            Esta es la respuesta del bot y es una respuesta muy larga para ver
+            que no se rompe nada
+          </p>
         </li>
       </ul>
     </main>
@@ -36,7 +112,7 @@
     <template id="message-template">
       <li class="message">
         <span></span>
-        <span></span>
+        <p></p>
       </li>
     </template>
   </body>
