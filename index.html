@@ -106,6 +106,18 @@
         }
       }
     </style>
+
+    <script type="module">
+      //con module podemos importar, exportar, etc. Ademas de que solucionamos el error que nos da al cargar el script
+      /*pongo delante de la variable un simbolo de $
+       para indicar que es un elemento del DOM*/
+
+      const $form = document.querySelector('form');
+
+      $form.addEventListener('submit', (event) => {
+        event.preventDefault();
+      });
+    </script>
   </head>
   <body>
     <main>
