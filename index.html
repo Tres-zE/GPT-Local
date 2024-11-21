@@ -111,12 +111,44 @@
       //con module podemos importar, exportar, etc. Ademas de que solucionamos el error que nos da al cargar el script
       /*pongo delante de la variable un simbolo de $
        para indicar que es un elemento del DOM*/
+      const $ = (el) => document.querySelector(el);
 
-      const $form = document.querySelector('form');
+      const $form = $('form');
+      const $input = $('input');
+      const $template = $('#message-template');
+      const $messages = $('ul');
+      const $container = $('main');
+      const $button = $('button');
 
       $form.addEventListener('submit', (event) => {
         event.preventDefault();
+        const messageText = $input.value.trim();
+
+        if ((messageText = !'')) {
+          //añadimos el mensaje en el DOM
+          $input.value = '';
+        }
+
+        addMessage(messageText, 'user');
       });
+
+      function addMessage(text, sender) {
+        //clonar el template
+        const colnedTemplate = $template.content.cloneNode(true);
+        const $newMessage = colnedTemplate.querySelector('.message');
+
+        const $who = $newMessage.querySelector('span');
+        const $text = $newMessage.querySelector('p');
+
+        $text.textContent = text;
+        $who.textContent = sender === 'bot' ? 'GPT' : 'Tú';
+        $newMessage.classList.add(sender);
+
+        //actualizar el scroll para ir bajando
+
+        //mandamos los mensajes al DOM
+        $messages.appendChild($newMessage);
+      }
     </script>
   </head>
   <body>
@@ -133,7 +165,7 @@
         </li>
 
         <li class="message user">
-          <span>GPT</span>
+          <span>Tú</span>
           <p>
             Esta es la respuesta del bot y es una respuesta muy larga para ver
             que no se rompe nada
