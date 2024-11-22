@@ -29,6 +29,7 @@
         margin-bottom: 10px;
 
         overflow-y: auto;
+        scroll-behavior: smooth;
       }
 
       ul {
@@ -100,6 +101,12 @@
           padding: 8px;
           transition: background 02s ease;
 
+          &[disabled] {
+            background: #ccc;
+            opacity: 0.6;
+            pointer-events: none;
+          }
+
           &:hover {
             background: rgb(0, 104, 173);
           }
@@ -124,18 +131,24 @@
         event.preventDefault();
         const messageText = $input.value.trim();
 
-        if ((messageText = !'')) {
+        if (messageText != '') {
           //añadimos el mensaje en el DOM
           $input.value = '';
         }
 
         addMessage(messageText, 'user');
+
+        $button.setAttribute('disabled', true);
+        setTimeout(() => {
+          addMessage('Hola, ¿cómo estás?', 'bot');
+          $button.removeAttribute('disabled');
+        }, 2000);
       });
 
       function addMessage(text, sender) {
         //clonar el template
-        const colnedTemplate = $template.content.cloneNode(true);
-        const $newMessage = colnedTemplate.querySelector('.message');
+        const clonedTemplate = $template.content.cloneNode(true);
+        const $newMessage = clonedTemplate.querySelector('.message');
 
         const $who = $newMessage.querySelector('span');
         const $text = $newMessage.querySelector('p');
@@ -144,10 +157,11 @@
         $who.textContent = sender === 'bot' ? 'GPT' : 'Tú';
         $newMessage.classList.add(sender);
 
-        //actualizar el scroll para ir bajando
-
         //mandamos los mensajes al DOM
         $messages.appendChild($newMessage);
+
+        //actualizar el scroll para ir bajando automaticamente en lugar de bajar de forma manual, esto esta en overflow que se encuentra en main del style
+        $container.scrollTop = $container.scrollHeight;
       }
     </script>
   </head>
