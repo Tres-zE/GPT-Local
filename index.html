@@ -141,6 +141,8 @@
       const $button = $('button');
       const $info = $('small');
 
+      let messages = [];
+
       //seleccionamos el modelo
       const SELECTED_MODEL = 'gemma-2b-it-q4f32_1-MLC';
 
@@ -155,7 +157,7 @@
         },
       });
 
-      $form.addEventListener('submit', (event) => {
+      $form.addEventListener('submit', async (event) => {
         event.preventDefault();
         const messageText = $input.value.trim();
 
@@ -165,12 +167,23 @@
         }
 
         addMessage(messageText, 'user');
+        $button.setAttribute('disabled', '');
 
-        $button.setAttribute('disabled', true);
-        setTimeout(() => {
-          addMessage('Hola, ¿cómo estás?', 'bot');
-          $button.removeAttribute('disabled');
-        }, 2000);
+        const userMessage = {
+          role: 'user',
+          content: messageText,
+        };
+
+        messages.push(userMessage);
+
+        const reply = await engine.chat.completions.create({
+          messages,
+        });
+
+        $button.removeAttribute('disabled');
+        const botMessage = reply.choices[0].message;
+        messages.push(botMessage);
+        addMessage(botMessage.content, 'bot');
       });
 
       function addMessage(text, sender) {
