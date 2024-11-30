@@ -127,7 +127,7 @@
 
     <script type="module">
       //con module podemos importar, exportar, etc. Ademas de que solucionamos el error que nos da al cargar el script
-      import { CreateMLCEngine } from 'https://esm.run/@mlc-ai/web-llm';
+      import { CreateWebWorkerMLCEngine } from 'https://esm.run/@mlc-ai/web-llm';
 
       /*pongo delante de la variable un simbolo de $
        para indicar que es un elemento del DOM*/
@@ -143,28 +143,22 @@
 
       let messages = [];
 
-      if (window.Worker) {
-        const worker = new Worker('worker.js');
-        worker.postMessage({ name: 'hello' });
-
-        worker.onmessage = (e) => {
-          console.log('Main thread: Message received from worker');
-          console.log(e);
-        };
-      }
-
       //seleccionamos el modelo
       const SELECTED_MODEL = 'Llama-3-8B-Instruct-q4f32_1-MLC-1k';
 
       //creamos el motor
-      const engine = await CreateMLCEngine(SELECTED_MODEL, {
-        initProgressCallback: (info) => {
-          $info.textContent = `${info.text}%`;
-          if (info.progress === 1) {
-            $button.removeAttribute('disabled');
-          }
-        },
-      });
+      const engine = await CreateWebWorkerMLCEngine(
+        new Worker('/worker.js', { type: 'module' }),
+        SELECTED_MODEL,
+        {
+          initProgressCallback: (info) => {
+            $info.textContent = `${info.text}%`;
+            if (info.progress === 1) {
+              $button.removeAttribute('disabled');
+            }
+          },
+        }
+      );
 
       $form.addEventListener('submit', async (event) => {
         event.preventDefault();
